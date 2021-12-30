@@ -66,11 +66,15 @@ class Sparky::JobApi {
 
     say "send request to {$sparky-api}/queue ...";
 
+    my %headers = content-type => 'application/json';
+
+    %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
+
     my $r = HTTP::Tiny.post: "{$sparky-api}/queue", 
-      headers => { content-type => 'application/json' },
+      headers => %headers,
       content => to-json(%upload);
 
-    $r<status> == 200 or die "{$r<status>} : {$r<content>.decode}";
+    $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
 
     return;
 
