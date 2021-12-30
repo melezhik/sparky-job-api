@@ -70,7 +70,7 @@ class Sparky::JobApi {
       headers => { content-type => 'application/json' },
       content => to-json(%upload);
 
-    $r<status> == 200 or die $r.perl;
+    $r<status> == 200 or die "{$r<status>} : {$r<content>.decode}";
 
     return;
 
