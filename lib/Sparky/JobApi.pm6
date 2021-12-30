@@ -79,18 +79,20 @@ class Sparky::JobApi {
   
   method status() {
 
-    my %r = HTTP::Tiny.new: "{self!sparky-api}/status/{$.project}/{$.job-id}";
+    my %r = HTTP::Tiny.get: "{self!sparky-api}/status/{$.project}/{$.job-id}";
 
     return "UNKNOWN" unless %r<status> == 200;
 
-    if %r<content>.Int == 1 {
+    if %r<content>.decode.Int == 1 {
       return "OK";
-    } elsif %r<content>.Int == -1 {
+    } elsif %r<content>.decode.Int == -1 {
       return "FAIL";
-    } elsif %r<content>.Int == 0 {
+    } elsif %r<content>.decode.Int == 0 {
       return "RUNNING";
-    } elsif %r<content>.Int == -2 {
+    } elsif %r<content>.decode.Int == -2 {
       return "QUEUED";
+    } else {
+      return "UNKNOWN";
     }
 
   }
