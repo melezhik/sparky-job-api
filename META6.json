@@ -1,0 +1,30 @@
+{
+  "auth": "zef:melezhik",
+  "authors" : [
+    "Alexey Melezhik"
+  ],
+  "build-depends" : [ ],
+  "depends" : [
+    "JSON::Tiny",
+    "HTTP::Tiny",
+    "Sparrow6"
+  ],
+  "description" : "Sparky Job Api",
+  "license" : "Artistic-2.0",
+  "name" : "Sparky-Job-Api",
+  "perl" : "6.*",
+  "provides" : {
+    "Sparky::JobApi" : "lib/Sparky/JobApi.pm6"
+  },
+  "resources" : [ ],
+  "source-type" : "git",
+  "source-url" : "https://github.com/melezhik/sparky-job-api.git",
+  "support" : {
+    "bugtracker" : "https://github.com/melezhik/sparky-job-api/issues",
+    "source" : "https://github.com/melezhik/sparky-job-api.git"
+  },
+  "tags" : [ ],
+  "test-depends" : [ ],
+  "version" : "0.0.1"
+}
+
