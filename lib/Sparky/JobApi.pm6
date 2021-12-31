@@ -64,7 +64,7 @@ class Sparky::JobApi {
 
     my $sparky-api = self!sparky-api();
 
-    say "send request to {$sparky-api}/queue ...";
+    say "send request: GET {$sparky-api}/queue ...";
 
     my %headers = content-type => 'application/json';
 
@@ -101,5 +101,49 @@ class Sparky::JobApi {
 
   }
 
+  method put-stash($data) {
+
+    my %upload = %( 
+      project => $.project-id,
+      job-id => $.job-id,
+      data => $data,
+    );
+
+    my $sparky-api = self!sparky-api();
+
+    say "send request: POST {$sparky-api}/stash ...";
+
+    my %headers = content-type => 'application/json';
+
+    %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
+
+    my $r = HTTP::Tiny.post: "{$sparky-api}/stash", 
+      headers => %headers,
+      content => to-json(%upload);
+
+    $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
+
+    return;
+
+  }
+
+  method get-stash() {
+
+    my $sparky-api = self!sparky-api();
+
+    say "send request: GET {$sparky-api}/stash/{$.project-id}/{$.job-id} ...";
+
+    my %headers = content-type => 'application/json';
+
+    %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
+
+    my $r = HTTP::Tiny.get: "{$sparky-api}/stash/{$.project-id}/{$.job-id}",
+      headers => %headers;
+
+    $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
+
+    return $r<content>.decode;
+
+  }
 }
 
