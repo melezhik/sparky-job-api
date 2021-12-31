@@ -14,6 +14,8 @@ class Sparky::JobApi {
 
     if $!mine {
 
+      die "can't use api parameter when mine is True" if $!api;
+
       $!project = tags()<SPARKY_PROJECT>;
 
       $!job-id = tags()<SPARKY_JOB_ID>;
@@ -154,7 +156,7 @@ class Sparky::JobApi {
 
     $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
 
-    return $r<content>.decode;
+    return from-json($r<content>.decode);
 
   }
 }
