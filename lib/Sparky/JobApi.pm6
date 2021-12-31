@@ -8,12 +8,22 @@ class Sparky::JobApi {
   has Str  $.project;
   has Str  $.job-id = "{('a' .. 'z').pick(20).join('')}.{$*PID}";
   has Int  $.workers = 4;
+  has Bool $.mine = False; 
 
   submethod TWEAK {
 
-   unless $!project  {
+    if $!mine {
+
+      $!project = tags()<SPARKY_PROJECT>;
+
+      $!job-id = tags()<SPARKY_JOB_ID>;
+      
+    } elsif ! $!project {
+
       my $i = (^$!workers).pick(1).join("")+1;
+
       $!project = "{tags()<SPARKY_PROJECT>}.spawned_%.2d".sprintf($i);
+
     }
 
   }
@@ -47,6 +57,8 @@ class Sparky::JobApi {
 
   method queue(%config) {
 
+    die "can'r queue already running project" if $.mine;
+
     %config<parent-project> = tags()<SPARKY_PROJECT>;
 
     %config<parent-job-id> = tags()<SPARKY_JOB_ID>;
@@ -64,7 +76,7 @@ class Sparky::JobApi {
 
     my $sparky-api = self!sparky-api();
 
-    say "send request: GET {$sparky-api}/queue ...";
+    say "send request: POST {$sparky-api}/queue ...";
 
     my %headers = content-type => 'application/json';
 
