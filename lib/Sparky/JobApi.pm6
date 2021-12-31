@@ -118,8 +118,10 @@ class Sparky::JobApi {
   method put-stash($data) {
 
     my %upload = %( 
-      project => $.project-id,
-      job-id => $.job-id,
+      config => %(
+        project => $.project,
+        job-id => $.job-id,
+      ),
       data => $data,
     );
 
@@ -145,13 +147,13 @@ class Sparky::JobApi {
 
     my $sparky-api = self!sparky-api();
 
-    say "send request: GET {$sparky-api}/stash/{$.project-id}/{$.job-id} ...";
+    say "send request: GET {$sparky-api}/stash/{$.project}/{$.job-id} ...";
 
     my %headers = content-type => 'application/json';
 
     %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
 
-    my $r = HTTP::Tiny.get: "{$sparky-api}/stash/{$.project-id}/{$.job-id}",
+    my $r = HTTP::Tiny.get: "{$sparky-api}/stash/{$.project}/{$.job-id}",
       headers => %headers;
 
     $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
