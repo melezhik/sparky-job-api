@@ -69,17 +69,18 @@ class Sparky::JobApi {
 
     %config<parent-job-id> = tags()<SPARKY_JOB_ID>;
 
-    say "parent trigger: ", self!get-trigger(tags()<SPARKY_PROJECT>,tags()<SPARKY_JOB_ID>);
-
     %config<project> = $.project;
     %config<job-id> = $.job-id;
 
     my %c = config();
 
+    use MONKEY-SEE-NO-EVAL;
+
     my %upload = %(
       config => %config,
       sparrowfile => $*PROGRAM.IO.slurp,
       sparrowdo-config => %c,
+      trigger => EVAL(self!get-trigger(tags()<SPARKY_PROJECT>,tags()<SPARKY_JOB_ID>)),
     );
 
     my $sparky-api = self!sparky-api();
