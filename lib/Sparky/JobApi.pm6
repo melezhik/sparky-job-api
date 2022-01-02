@@ -31,21 +31,25 @@ class Sparky::JobApi {
   }
 
 
-  method !sparky-api() {
+  method !internal-api() {
 
-    my $sparky-api;
+    my $api;
 
-    if self.api {
-      $sparky-api = self.api;
-    } elsif tags()<SPARKY_WORKER> eq "localhost" {
-      $sparky-api = "http://127.0.0.1:{tags()<SPARKY_TCP_PORT>}";
+    if tags()<SPARKY_WORKER> eq "localhost" {
+      $api = "http://127.0.0.1:{tags()<SPARKY_TCP_PORT>}";
     } elsif tags()<SPARKY_WORKER> eq "docker" {
-      $sparky-api = "http://host.docker.internal:{tags()<SPARKY_TCP_PORT>}";
+      $api = "http://host.docker.internal:{tags()<SPARKY_TCP_PORT>}";
     } else {
       die "Sparky::JobApi is not supported for this type of worker: {tags()<SPARKY_WORKER>}"
     }
 
-    return $sparky-api;
+    return $api;
+
+  }
+
+  method !sparky-api() {
+
+    return self.api || self!internal-api();
 
   }
 
