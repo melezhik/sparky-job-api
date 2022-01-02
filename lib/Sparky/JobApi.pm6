@@ -69,6 +69,8 @@ class Sparky::JobApi {
 
     %config<parent-job-id> = tags()<SPARKY_JOB_ID>;
 
+    say "parent trigger: ", self!get-trigger(tags()<SPARKY_PROJECT>,tags()<SPARKY_JOB_ID>);
+
     %config<project> = $.project;
     %config<job-id> = $.job-id;
 
@@ -98,6 +100,21 @@ class Sparky::JobApi {
 
   }
 
+
+  method !get-trigger($project,$job-id) {
+
+    my %headers = content-type => 'text/plain';
+
+    %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
+
+    my $r = HTTP::Tiny.get: "{self!internal-api}/trigger/{$project}/{$job-id}",
+      headers => %headers;
+
+    $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
+
+    return $r<content>.decode;
+
+  }
   
   method status() {
 
