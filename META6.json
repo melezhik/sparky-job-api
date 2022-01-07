@@ -7,7 +7,8 @@
   "depends" : [
     "JSON::Tiny",
     "HTTP::Tiny",
-    "Sparrow6"
+    "Sparrow6",
+    "IO::Socket::SSL"
   ],
   "description" : "Sparky Job Api",
   "license" : "Artistic-2.0",
