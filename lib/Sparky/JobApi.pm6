@@ -31,14 +31,18 @@ class Sparky::JobApi {
   }
 
 
+  method !proto() {
+    return tags()<SPARKY_USE_TLS> ?? "https" !! "http";
+  }
+
   method !internal-api() {
 
     my $api;
 
     if tags()<SPARKY_WORKER> eq "localhost" {
-      $api = "http://127.0.0.1:{tags()<SPARKY_TCP_PORT>}";
+      $api = "{self!proto()}://127.0.0.1:{tags()<SPARKY_TCP_PORT>}";
     } elsif tags()<SPARKY_WORKER> eq "docker" {
-      $api = "http://host.docker.internal:{tags()<SPARKY_TCP_PORT>}";
+      $api = "{self!proto()}://host.docker.internal:{tags()<SPARKY_TCP_PORT>}";
     } else {
       die "Sparky::JobApi is not supported for this type of worker: {tags()<SPARKY_WORKER>}"
     }
