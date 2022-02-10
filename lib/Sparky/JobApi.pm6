@@ -30,11 +30,10 @@ class Sparky::JobApi {
 
   }
 
-
   method !proto() {
     return tags()<SPARKY_USE_TLS> ?? "https" !! "http";
   }
-
+ 
   method !internal-api() {
 
     my $api;
@@ -187,5 +186,47 @@ class Sparky::JobApi {
     return from-json($r<content>.decode);
 
   }
+
 }
 
+role Sparky::JobApi::Role {
+
+    method wait-jobs (@q, %args?) {
+
+      my @jobs;
+
+      my $to = %args<timeout> || 2;
+
+      for @q -> $j {
+       my $s = supply {
+          while True {
+            my %out = $j.info; %out<status> = $j.status;
+            emit %out;
+            done if $j.status eq "FAIL" or $j.status eq "OK";
+            sleep($to);
+          }
+        }
+      $s.tap( -> $v {
+          say $v if %args<debug>;
+          push @jobs, $v if $v<status> eq "FAIL" or $v<status> eq "OK"
+        }
+      );
+    }
+
+      return %(
+        "OK" => @jobs.grep({$_<status> eq "OK"}).elems,
+        "FAIL" => @jobs.grep({$_<status> eq "FAIL"}).elems,
+      )
+  }
+
+  method wait-job ($q, %args?) {
+    self.wait-jobs(($q,),%args);
+  }
+
+  method new-job (:$api?, :$project?, :$job-id?, :$mine?) {
+    my %h = (:$api, :$project, :$job-id, :$mine).grep({$_.value.defined});
+    say %h.perl;
+    Sparky::JobApi.new: |%h
+  }
+
+}
