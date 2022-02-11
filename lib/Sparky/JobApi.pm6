@@ -191,6 +191,13 @@ class Sparky::JobApi {
 
 role Sparky::JobApi::Role {
 
+    has Str $.stage = tags()<stage>;
+
+    method run () {
+      say "run stage: {$.stage}";
+      self."stage-{$.stage}"();  
+    }
+
     method wait-jobs (@q, %args?) {
 
       my @jobs;
