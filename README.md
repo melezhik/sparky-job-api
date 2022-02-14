@@ -5,12 +5,12 @@ Api to run Sparky Jobs
 # Installation
 
 ```bash
-zef install --/test Sparky::JobApi
+zef install Sparky::JobApi
 ```
 
 # Documentation
 
-See https://github.com/melezhik/sparky#job-api
+This module is not meant to be used standalone, please read [Sparky Job API](https://github.com/melezhik/sparky#job-api) for details.
 
 # Author
 
