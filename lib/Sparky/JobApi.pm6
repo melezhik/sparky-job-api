@@ -195,7 +195,7 @@ class Sparky::JobApi {
 
 role Sparky::JobApi::Role {
 
-    has Str $.stage = tags()<stage>;
+    has Str $.stage = tags()<stage> || "main";
 
     method run () {
       say "run stage: {$.stage}";
