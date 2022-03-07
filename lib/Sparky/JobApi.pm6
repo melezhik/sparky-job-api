@@ -206,7 +206,7 @@ role Sparky::JobApi::Role {
 
       my @jobs;
 
-      my $to = %args<timeout> || 2;
+      my $to = %args<timeout> || 5;
 
       for @q -> $j {
        my $s = supply {
@@ -234,8 +234,8 @@ role Sparky::JobApi::Role {
     self.wait-jobs(($q,),%args);
   }
 
-  method new-job (:$api?, :$project?, :$job-id?, :$mine?) {
-    my %h = (:$api, :$project, :$job-id, :$mine).grep({$_.value.defined});
+  method new-job (:$api?, :$project?, :$job-id?, :$mine?, :$workers? ) {
+    my %h = (:$api, :$project, :$job-id, :$mine, :$workers).grep({$_.value.defined});
     say %h.perl;
     Sparky::JobApi.new: |%h
   }

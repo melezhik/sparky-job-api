@@ -2,6 +2,11 @@ Revision history for Sparky-Job-Api
 
 {{$NEXT}}
 
+    `wait-job` - increase sleep to 5 for http calls, to
+    reduce load to sparky web 
+
+    Bugfix - add `:workers` parameter to wait-job methods 
+
 0.0.2 2022-02-14T00:00:00Z
 
     Usage clarification
