@@ -236,7 +236,7 @@ role Sparky::JobApi::Role {
 
   method new-job (:$api?, :$project?, :$job-id?, :$mine?, :$workers? ) {
     my %h = (:$api, :$project, :$job-id, :$mine, :$workers).grep({$_.value.defined});
-    say %h.perl;
+    #say %h.perl;
     Sparky::JobApi.new: |%h
   }
 
