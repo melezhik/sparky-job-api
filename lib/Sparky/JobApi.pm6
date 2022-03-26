@@ -206,20 +206,28 @@ role Sparky::JobApi::Role {
 
       my @jobs;
 
-      my $to = %args<timeout> || 5;
+      my $to = %args<sleep> || 5;
+      my $start-time = now;
+      my $timeout = %args<timeout> || 120;
 
       for @q -> $j {
-       my $s = supply {
+        my $s = supply {
           while True {
             my %out = $j.info; %out<status> = $j.status;
             emit %out;
             done if $j.status eq "FAIL" or $j.status eq "OK";
             sleep($to);
+            my $time = now - $start-time;
+            if $time > $timeout {
+              %out<status> = "TIMEOUT";
+              emit %out;
+              done;
+            }
           }
         }
-      $s.tap( -> $v {
+        $s.tap( -> $v {
           say $v if %args<debug>;
-          push @jobs, $v if $v<status> eq "FAIL" or $v<status> eq "OK"
+          push @jobs, $v if $v<status> eq "FAIL" or $v<status> eq "OK" or $v<status> eq "TIMEOUT"
         }
       );
     }
@@ -227,6 +235,7 @@ role Sparky::JobApi::Role {
       return %(
         "OK" => @jobs.grep({$_<status> eq "OK"}).elems,
         "FAIL" => @jobs.grep({$_<status> eq "FAIL"}).elems,
+        "TIMEOUT" => @jobs.grep({$_<status> eq "TIMEOUT"}).elems,
       )
   }
 
