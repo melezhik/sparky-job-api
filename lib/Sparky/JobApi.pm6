@@ -208,7 +208,7 @@ role Sparky::JobApi::Role {
 
       my $to = %args<sleep> || 5;
       my $start-time = now;
-      my $timeout = %args<timeout> || 120;
+      my $timeout = %args<timeout> || 60*10;
 
       for @q -> $j {
         my $s = supply {
