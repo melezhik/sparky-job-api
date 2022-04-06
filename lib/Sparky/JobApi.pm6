@@ -210,6 +210,8 @@ role Sparky::JobApi::Role {
       my $start-time = now;
       my $timeout = %args<timeout> || 60*10;
 
+      say "wait for jobs, timeout: $timeout sec";
+
       for @q -> $j {
         my $s = supply {
           while True {
