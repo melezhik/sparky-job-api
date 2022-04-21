@@ -126,6 +126,19 @@ class Sparky::JobApi {
   
   method status() {
 
+
+    # try to use file for localhost
+
+    if self!sparky-api ~~ /'127.0.0.1'/ {
+
+      if "{%*ENV<HOME>}/.sparky/work/{$.project}/.states/{$.job-id}".IO ~~ :f {
+        return "{%*ENV<HOME>}/.sparky/work/{$.project}/.states/{$.job-id}".IO.slurp
+      } elsif "{%*ENV<HOME>}/.sparky/projects/{$.project}/.triggers/{$.job-id}".IO ~~ :f {
+        return -2
+      }
+
+    }
+
     my %r = HTTP::Tiny.get: "{self!sparky-api}/status/{$.project}/{$.job-id}";
 
     return "UNKNOWN" unless %r<status> == 200;
