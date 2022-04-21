@@ -132,11 +132,21 @@ class Sparky::JobApi {
     if self!sparky-api ~~ /'127.0.0.1'/ {
 
       if "{%*ENV<HOME>}/.sparky/work/{$.project}/.states/{$.job-id}".IO ~~ :f {
-        return "{%*ENV<HOME>}/.sparky/work/{$.project}/.states/{$.job-id}".IO.slurp
+       my $s = "{%*ENV<HOME>}/.sparky/work/{$.project}/.states/{$.job-id}".IO.slurp;
+       if $s == 1 {
+        return "OK";
+       } elsif $s == -1 {
+        return "FAIL";
+       } elsif $s == 0 {
+        return "RUNNING";
+       } elsif $s == -2 {
+        return "QUEUED";
+       } else {
+        return "UNKNOWN";
+       }
       } elsif "{%*ENV<HOME>}/.sparky/projects/{$.project}/.triggers/{$.job-id}".IO ~~ :f {
-        return -2
+        return "QUEUED"
       }
-
     }
 
     my %r = HTTP::Tiny.get: "{self!sparky-api}/status/{$.project}/{$.job-id}";
