@@ -226,7 +226,7 @@ class Sparky::JobApi {
 
     %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
 
-    my $r = HTTP::Tiny.put: "{$sparky-api}/stash", 
+    my $r = HTTP::Tiny.put: "{$sparky-api}/file/project/{$.project}/job/{$.job-id}/filename/{$filename}", 
       headers => %headers,
       content => Blob.new($data.encode);
 
