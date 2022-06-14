@@ -3,6 +3,7 @@ Revision history for Sparky-Job-Api
 {{$NEXT}}
 
     Improvement - try to use file for localhost
+    Add job file endpoints
 
 0.0.2 2022-03-13T05:20:00Z
 

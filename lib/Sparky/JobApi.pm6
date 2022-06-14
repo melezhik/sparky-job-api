@@ -214,6 +214,49 @@ class Sparky::JobApi {
 
   }
 
+  method put-file($data,$filename) {
+
+    my $sparky-api = self!sparky-api();
+
+    say "send request: PUT {$sparky-api}/file/project/{$.project}/job/{$.job-id}/filename/{$filename} ...";
+
+    my %headers = %(
+      Content-Type => "application/octet-stream"
+    );
+
+    %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
+
+    my $r = HTTP::Tiny.put: "{$sparky-api}/stash", 
+      headers => %headers,
+      content => Blob.new($data);
+
+    $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
+
+    return;
+
+  }
+
+  method get-file($filename) {
+
+    my $sparky-api = self!sparky-api();
+
+    say "send request: GET {$sparky-api}/file/{$.project}/{$.job-id}/{$filename} ...";
+
+    my %headers = %(
+      Content-Type => "application/octet-stream"
+    );
+
+    %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
+
+    my $r = HTTP::Tiny.get: "{$sparky-api}/stash/{$.project}/{$.job-id}/{$filename}",
+      headers => %headers;
+
+    $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
+
+    return $r<content>.decode;
+
+  }
+
 }
 
 role Sparky::JobApi::Role {
