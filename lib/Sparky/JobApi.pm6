@@ -228,7 +228,7 @@ class Sparky::JobApi {
 
     my $r = HTTP::Tiny.put: "{$sparky-api}/stash", 
       headers => %headers,
-      content => Blob.new($data);
+      content => Blob.new($data.encode);
 
     $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
 
