@@ -214,11 +214,11 @@ class Sparky::JobApi {
 
   }
 
-  method put-file($data,$filename) {
+  method put-file($path,$filename) {
 
     my $sparky-api = self!sparky-api();
 
-    say "send request: PUT {$sparky-api}/file/project/{$.project}/job/{$.job-id}/filename/{$filename} ...";
+    say "send request: PUT {$sparky-api}/file/project/{$.project}/job/{$.job-id}/filename/{$filename} ... path: {$path}";
 
     my %headers = %(
       Content-Type => "application/octet-stream"
@@ -228,7 +228,7 @@ class Sparky::JobApi {
 
     my $r = HTTP::Tiny.put: "{$sparky-api}/file/project/{$.project}/job/{$.job-id}/filename/{$filename}", 
       headers => %headers,
-      content => Blob.new($data.encode);
+      content => Blob.new($path.IO.slurp: :bin);
 
     $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
 
