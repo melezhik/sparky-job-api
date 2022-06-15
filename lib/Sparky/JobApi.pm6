@@ -218,7 +218,8 @@ class Sparky::JobApi {
 
     my $sparky-api = self!sparky-api();
 
-    say "send request: PUT {$sparky-api}/file/project/{$.project}/job/{$.job-id}/filename/{$filename} ... path: {$path}";
+    say "send request: PUT {$sparky-api}/file/project/{$.project}/job/{$.job-id}/filename/{$filename}"; 
+    say "file path: {$path}";
 
     my %headers = %(
       Content-Type => "application/octet-stream"
@@ -248,7 +249,7 @@ class Sparky::JobApi {
 
     %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
 
-    my $r = HTTP::Tiny.get: "{$sparky-api}/stash/{$.project}/{$.job-id}/{$filename}",
+    my $r = HTTP::Tiny.get: "{$sparky-api}/file/{$.project}/{$.job-id}/{$filename}",
       headers => %headers;
 
     $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
