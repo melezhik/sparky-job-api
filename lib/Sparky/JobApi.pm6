@@ -237,7 +237,7 @@ class Sparky::JobApi {
 
   }
 
-  method get-file($filename) {
+  method get-file($filename, :$text = False) {
 
     my $sparky-api = self!sparky-api();
 
@@ -254,8 +254,11 @@ class Sparky::JobApi {
 
     $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
 
-    return $r<content>.decode;
-
+    if $text == True  {
+      return $r<content>.decode;
+    } else {
+      return $r<content>;
+    } 
   }
 
 }
