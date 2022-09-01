@@ -298,7 +298,7 @@ role Sparky::JobApi::Role {
           }
         }
         $s.tap( -> $v {
-          say $v if %args<debug>;
+          say "[{DateTime.now}] {$v.perl}" if %args<debug>;
           push @jobs, $v if $v<status> eq "FAIL" or $v<status> eq "OK" or $v<status> eq "TIMEOUT"
         }
       );
