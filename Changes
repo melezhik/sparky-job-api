@@ -2,10 +2,13 @@ Revision history for Sparky-Job-Api
 
 {{$NEXT}}
 
+0.0.4 2022-03-13T09:40:00Z
+
+    Job get-file, :text modifier support
     Improvement - try to use file for localhost
     Add job file endpoints
 
-0.0.2 2022-03-13T05:20:00Z
+0.0.3 2022-03-13T05:20:00Z
 
     `wait-job` - increase sleep to 5 for http calls, to
     reduce load to sparky web 
