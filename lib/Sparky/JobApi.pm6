@@ -92,7 +92,7 @@ class Sparky::JobApi {
 
     my $sparky-api = self!sparky-api();
 
-    say "send request: POST {$sparky-api}/queue ...";
+    say ">>> send request: POST {$sparky-api}/queue ...";
 
     my %headers = content-type => 'application/json';
 
@@ -179,7 +179,7 @@ class Sparky::JobApi {
 
     my $sparky-api = self!sparky-api();
 
-    say "send request: POST {$sparky-api}/stash ...";
+    say ">>> send request: POST {$sparky-api}/stash ...";
 
     my %headers = content-type => 'application/json';
 
@@ -199,7 +199,7 @@ class Sparky::JobApi {
 
     my $sparky-api = self!sparky-api();
 
-    say "send request: GET {$sparky-api}/stash/{$.project}/{$.job-id} ...";
+    say ">>> send request: GET {$sparky-api}/stash/{$.project}/{$.job-id} ...";
 
     my %headers = content-type => 'application/json';
 
@@ -218,8 +218,8 @@ class Sparky::JobApi {
 
     my $sparky-api = self!sparky-api();
 
-    say "send request: PUT {$sparky-api}/file/project/{$.project}/job/{$.job-id}/filename/{$filename}"; 
-    say "file path: {$path}";
+    say ">>> send request: PUT {$sparky-api}/file/project/{$.project}/job/{$.job-id}/filename/{$filename}"; 
+    say ">>> file path: {$path}";
 
     my %headers = %(
       Content-Type => "application/octet-stream"
@@ -241,7 +241,7 @@ class Sparky::JobApi {
 
     my $sparky-api = self!sparky-api();
 
-    say "send request: GET {$sparky-api}/file/{$.project}/{$.job-id}/{$filename} ...";
+    say ">>> send request: GET {$sparky-api}/file/{$.project}/{$.job-id}/{$filename} ...";
 
     my %headers = %(
       Content-Type => "application/octet-stream"
@@ -280,7 +280,7 @@ role Sparky::JobApi::Role {
       my $start-time = now;
       my $timeout = %args<timeout> || %*ENV<SPARKY_JOB_TIMEOUT> || 60*10;
 
-      say "wait for jobs, timeout: $timeout sec";
+      say ">>> wait for jobs, timeout: $timeout sec";
 
       for @q -> $j {
         my $s = supply {
@@ -298,7 +298,7 @@ role Sparky::JobApi::Role {
           }
         }
         $s.tap( -> $v {
-          say "[{DateTime.now}] {$v.perl}" if %args<debug>;
+          say ">>> [{DateTime.now}] {$v.perl}" if %args<debug>;
           push @jobs, $v if $v<status> eq "FAIL" or $v<status> eq "OK" or $v<status> eq "TIMEOUT"
         }
       );
