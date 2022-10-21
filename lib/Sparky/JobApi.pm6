@@ -83,16 +83,17 @@ class Sparky::JobApi {
 
     use MONKEY-SEE-NO-EVAL;
 
+    my $trigger = EVAL(self!get-trigger(tags()<SPARKY_PROJECT>,tags()<SPARKY_JOB_ID>));
     my %upload = %(
       config => %config,
       sparrowfile => $*PROGRAM.IO.slurp,
       sparrowdo-config => %c,
-      trigger => EVAL(self!get-trigger(tags()<SPARKY_PROJECT>,tags()<SPARKY_JOB_ID>)),
+      trigger => $trigger,
     );
 
     my $sparky-api = self!sparky-api();
 
-    say ">>> send request: POST {$sparky-api}/queue ...";
+    say ">>> send request: POST job to {$sparky-api}/queue | trigger: {$trigger.perl} | config: {%config.perl}...";
 
     my %headers = content-type => 'application/json';
 
