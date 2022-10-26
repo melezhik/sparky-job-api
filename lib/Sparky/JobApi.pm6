@@ -180,7 +180,7 @@ class Sparky::JobApi {
 
     my $sparky-api = self!sparky-api();
 
-    say ">>> send request: POST {$sparky-api}/stash ...";
+    say ">>> send request: POST stash data to {$sparky-api}/stash ...";
 
     my %headers = content-type => 'application/json';
 
@@ -200,7 +200,7 @@ class Sparky::JobApi {
 
     my $sparky-api = self!sparky-api();
 
-    say ">>> send request: GET {$sparky-api}/stash/{$.project}/{$.job-id} ...";
+    say ">>> send request: GET stash data from {$sparky-api}/stash/{$.project}/{$.job-id} ...";
 
     my %headers = content-type => 'application/json';
 
@@ -219,7 +219,7 @@ class Sparky::JobApi {
 
     my $sparky-api = self!sparky-api();
 
-    say ">>> send request: PUT {$sparky-api}/file/project/{$.project}/job/{$.job-id}/filename/{$filename}"; 
+    say ">>> send request: PUT job file to {$sparky-api}/file/project/{$.project}/job/{$.job-id}/filename/{$filename}"; 
     say ">>> file path: {$path}";
 
     my %headers = %(
@@ -242,7 +242,7 @@ class Sparky::JobApi {
 
     my $sparky-api = self!sparky-api();
 
-    say ">>> send request: GET {$sparky-api}/file/{$.project}/{$.job-id}/{$filename} ...";
+    say ">>> send request: GET job file from {$sparky-api}/file/{$.project}/{$.job-id}/{$filename} ...";
 
     my %headers = %(
       Content-Type => "application/octet-stream"
