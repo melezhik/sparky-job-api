@@ -4,7 +4,7 @@ use JSON::Tiny;
 
 use Sparrow6::DSL;
 
-unit module Sparky::JobApi:ver<0.0.4>;
+unit module Sparky::JobApi:ver<0.0.5>;
 
 class Sparky::JobApi {
 

@@ -2,6 +2,8 @@ Revision history for Sparky-Job-Api
 
 {{$NEXT}}
 
+0.0.5 2022-10-26T16:05:00Z
+
     Introduce SPARKY_JOB_TIMEOUT
 
     Adds ">>>" markers for log messages 
