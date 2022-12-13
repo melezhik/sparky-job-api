@@ -99,14 +99,21 @@ class Sparky::JobApi {
 
     %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
 
-    my $r = HTTP::Tiny.post: "{$sparky-api}/queue", 
-      headers => %headers,
-      content => to-json(%upload);
+    my $cnt = 0;
 
-    $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
-
+    while True {
+      my $r = HTTP::Tiny.post: "{$sparky-api}/queue", 
+        headers => %headers,
+        content => to-json(%upload);
+        last if $r<status> == 200;
+        if $cnt == 3 or $r<status> != 599 {
+          die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}" 
+        }
+        $cnt++;
+        say ">>> (599 recieved) http retry: #0{$cnt}";
+        sleep(60);
+    }
     return;
-
   }
 
 
@@ -116,12 +123,24 @@ class Sparky::JobApi {
 
     %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
 
-    my $r = HTTP::Tiny.get: "{self!internal-api}/trigger/{$project}/{$job-id}",
-      headers => %headers;
+    my $return;
+    my $cnt = 0;
+    while True {
+      my $r = HTTP::Tiny.get: "{self!internal-api}/trigger/{$project}/{$job-id}",
+        headers => %headers;
+        if $r<status> == 200 {
+          $return = $r<content>.decode;
+          last;
+        }
+        if $cnt == 3 or $r<status> != 599 {
+          die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}"
+        }
+        $cnt++;
+        say ">>> (599 recieved) http retry: #0{$cnt}";
+        sleep(60);
+    }
 
-    $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
-
-    return $r<content>.decode;
+    return $return;
 
   }
   
@@ -186,14 +205,23 @@ class Sparky::JobApi {
 
     %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
 
-    my $r = HTTP::Tiny.post: "{$sparky-api}/stash", 
-      headers => %headers,
-      content => to-json(%upload);
+    my $cnt = 0;
 
-    $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
-
+    while True {
+      my $r = HTTP::Tiny.post: "{$sparky-api}/stash",
+        headers => %headers,
+        content => to-json(%upload);
+        if $r<status> == 200 {
+          last;
+        }
+        if $cnt == 3 or $r<status> != 599 {
+          die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}"
+        }
+        $cnt++;
+        say ">>> (599 recieved) http retry: #0{$cnt}";
+        sleep(60);
+    }
     return;
-
   }
 
   method get-stash() {
@@ -206,13 +234,24 @@ class Sparky::JobApi {
 
     %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
 
-    my $r = HTTP::Tiny.get: "{$sparky-api}/stash/{$.project}/{$.job-id}",
-      headers => %headers;
+    my $return;
+    my $cnt = 0;
 
-    $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
-
-    return from-json($r<content>.decode);
-
+    while True {
+      my $r = HTTP::Tiny.get: "{$sparky-api}/stash/{$.project}/{$.job-id}",
+        headers => %headers;
+        if $r<status> == 200 {
+          $return = from-json($r<content>.decode);
+          last;
+        }
+        if $cnt == 3 or $r<status> != 599 {
+          die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}"
+        }
+        $cnt++;
+        say ">>> (599 recieved) http retry: #0{$cnt}";
+        sleep(60);
+    }
+    return $return;
   }
 
   method put-file($path,$filename) {
@@ -228,14 +267,22 @@ class Sparky::JobApi {
 
     %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
 
-    my $r = HTTP::Tiny.put: "{$sparky-api}/file/project/{$.project}/job/{$.job-id}/filename/{$filename}", 
-      headers => %headers,
-      content => Blob.new($path.IO.slurp: :bin);
+    my $cnt = 0;
 
-    $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
+    while True {
+      my $r = HTTP::Tiny.post: "{$sparky-api}/queue",
+        headers => %headers,
+        content => Blob.new($path.IO.slurp: :bin);
+        last if $r<status> == 200;
+        if $cnt == 3 or $r<status> != 599 {
+          die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}"
+        }
+        $cnt++;
+        say ">>> (599 recieved) http retry: #0{$cnt}";
+        sleep(60);
+    }
 
     return;
-
   }
 
   method get-file($filename, :$text = False) {
@@ -250,16 +297,30 @@ class Sparky::JobApi {
 
     %headers<token> = tags()<SPARKY_API_TOKEN> if tags()<SPARKY_API_TOKEN>;
 
-    my $r = HTTP::Tiny.get: "{$sparky-api}/file/{$.project}/{$.job-id}/{$filename}",
-      headers => %headers;
+    my $return;
+    my $cnt = 0;
 
-    $r<status> == 200 or die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}";
+    while True {
+      my $r = HTTP::Tiny.get: "{$sparky-api}/file/{$.project}/{$.job-id}/{$filename}",
+        headers => %headers;
+        if $r<status> == 200 {
+          if $text == True  {
+            return $r<content>.decode;
+          } else {
+            $return = $r<content>;
+          }
+          last;
+        }
+        if $cnt == 3 or $r<status> != 599 {
+          die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}"
+        }
+        $cnt++;
+        say ">>> (599 recieved) http retry: #0{$cnt}";
+        sleep(60);
+    }
 
-    if $text == True  {
-      return $r<content>.decode;
-    } else {
-      return $r<content>;
-    } 
+    return $return;
+
   }
 
 }
