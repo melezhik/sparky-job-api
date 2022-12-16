@@ -270,7 +270,7 @@ class Sparky::JobApi {
     my $cnt = 0;
 
     while True {
-      my $r = HTTP::Tiny.post: "{$sparky-api}/queue",
+      my $r = HTTP::Tiny.put: "{$sparky-api}/file/project/{$.project}/job/{$.job-id}/filename/{$filename}",
         headers => %headers,
         content => Blob.new($path.IO.slurp: :bin);
         last if $r<status> == 200;
