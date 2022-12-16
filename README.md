@@ -1,6 +1,6 @@
 # Sparky::JobApi
 
-Api to run Sparky Jobs
+API to run Sparky Jobs
 
 [![SparrowCI](https://ci.sparrowhub.io/project/gh-melezhik-sparky-job-api/badge)](https://ci.sparrowhub.io)
 
