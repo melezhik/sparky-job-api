@@ -2,6 +2,11 @@ Revision history for Sparky-Job-Api
 
 {{$NEXT}}
 
+0.0.6 2022-12-15T19:50:00Z
+
+    Add retry logic to handle 
+    sparky api temporary downs
+
 0.0.5 2022-10-26T16:05:00Z
 
     Introduce SPARKY_JOB_TIMEOUT

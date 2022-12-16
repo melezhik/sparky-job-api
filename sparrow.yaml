@@ -1,10 +1,38 @@
+secrets:
+  - FEZ_TOKEN
 tasks:
-  -
-    name: zef-test
-    language: Bash
+  - name: fez-upload
     default: true
-    code: |
-      set -e
-      cd source/
-      zef install . --deps-only --/test
-      zef install test .
+    language: Raku
+    init: |
+      run_task "test";
+      if config()<tasks><git-commit><state><comment> ~~ /'release!'/ {
+        run_task "upload"
+      }      
+    subtasks:
+    - 
+      name: test
+      language: Bash
+      code: |
+        set -e
+        cd source
+        zef test .        
+    -
+      name: upload
+      language: Bash
+      code: |
+        set -e
+        cat << HERE > ~/.fez-config.json
+          {"groups":[],"un":"melezhik","key":"${FEZ_TOKEN}"}
+        HERE
+        cd source/
+        zef install --/test fez
+        tom --clean
+        fez upload        
+    depends:
+      -
+        name: git-commit
+  - name: git-commit
+    plugin: git-commit-data
+    config:
+      dir: source
