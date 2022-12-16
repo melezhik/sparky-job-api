@@ -1,3 +1,6 @@
+image:
+  - melezhik/sparrow:debian
+
 secrets:
   - FEZ_TOKEN
 tasks:
