@@ -2,6 +2,12 @@ Revision history for Sparky-Job-Api
 
 {{$NEXT}}
 
+0.0.7 2025-04-24T20:00:00Z
+
+    Use JSON::Fast (
+      instead of JSON::Tiny
+    )
+
 0.0.6 2022-12-15T19:50:00Z
 
     Add retry logic to handle 

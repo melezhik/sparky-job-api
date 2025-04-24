@@ -1,10 +1,10 @@
 use HTTP::Tiny;
 
-use JSON::Tiny;
+use JSON::Fast;
 
 use Sparrow6::DSL;
 
-unit module Sparky::JobApi:ver<0.0.6>;
+unit module Sparky::JobApi:ver<0.0.7>;
 
 class Sparky::JobApi {
 

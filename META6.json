@@ -5,7 +5,7 @@
   ],
   "build-depends" : [ ],
   "depends" : [
-    "JSON::Tiny",
+    "JSON::Fast",
     "HTTP::Tiny",
     "Sparrow6",
     "IO::Socket::SSL"
@@ -15,7 +15,7 @@
   "name" : "Sparky-Job-Api",
   "perl" : "6.*",
   "provides" : {
-    "Sparky::JobApi" : "lib/Sparky/JobApi.pm6"
+    "Sparky::JobApi" : "lib/Sparky/JobApi.rakumod"
   },
   "resources" : [ ],
   "source-type" : "git",
@@ -26,6 +26,6 @@
   },
   "tags" : [ ],
   "test-depends" : [ ],
-  "version" : "0.0.6"
+  "version" : "0.0.7"
 }
 
