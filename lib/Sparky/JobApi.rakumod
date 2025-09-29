@@ -4,7 +4,7 @@ use JSON::Fast;
 
 use Sparrow6::DSL;
 
-unit module Sparky::JobApi:ver<0.0.7>;
+unit module Sparky::JobApi:ver<0.0.8>;
 
 class Sparky::JobApi {
 
@@ -157,6 +157,8 @@ class Sparky::JobApi {
         return "OK";
        } elsif $s == -1 {
         return "FAIL";
+       } elsif $s == -11 {
+        return "FAIL";
        } elsif $s == 0 {
         return "RUNNING";
        } elsif $s == -2 {
@@ -176,6 +178,8 @@ class Sparky::JobApi {
     if %r<content>.decode.Int == 1 {
       return "OK";
     } elsif %r<content>.decode.Int == -1 {
+      return "FAIL";
+    } elsif %r<content>.decode.Int == -11 {
       return "FAIL";
     } elsif %r<content>.decode.Int == 0 {
       return "RUNNING";
