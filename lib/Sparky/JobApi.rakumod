@@ -4,7 +4,7 @@ use JSON::Fast;
 
 use Sparrow6::DSL;
 
-unit module Sparky::JobApi:ver<0.0.9>;
+unit module Sparky::JobApi:ver<0.0.10>;
 
 class Sparky::JobApi {
 
@@ -95,7 +95,17 @@ class Sparky::JobApi {
     for $s ~~ m:g/^^ "meta:" \s+ (.*?) $$/ ->  $m {
       for "{$m[0]}".split(/\s+/) -> $i {
         my @kv =  "$i".split("=");
-        my %i; %i{@kv[0]} = @kv[1];
+        my %i;
+        if @kv.elems == 1 {
+          if @kv[0] ~~ /^^ "!"/ {
+            my $s = @kv[0].subst(/^^ "!"/,"");
+            %i{$s} = False; 
+          } else {
+            %i{@kv[0]} = True 
+          }
+        } else {
+          %i{@kv[0]} = @kv[1];
+        }
         push @meta, %i;
       };
     }
