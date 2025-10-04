@@ -68,6 +68,38 @@ class Sparky::JobApi {
     }
   }
 
+  method report() {
+
+    my %r = HTTP::Tiny.get: "{self!sparky-api}/repor/raw/{$.project}/{$.job-id}";
+
+    return "" unless %r<status> == 200;
+
+    return %r<content>.decode.Str;
+
+  }
+
+  method meta() {
+
+    my @meta;
+
+    my $s = self.report;
+
+    return @meta unless $s;
+
+    return @meta if $s eq "";
+
+    for $s ~~ m:g/^^ "meta:" \s+ (.*?) $$/ ->  $m {
+      for "{$m[0]}".split(/\s+/) -> $i {
+        my @kv =  "$i".split("=");
+        my %i; %i{@kv[0]} = @kv[1];
+        push @meta, %i;
+      };
+    }
+
+    return @meta;
+
+  }
+
   method queue(%config) {
 
     die "can'r queue already running project" if $.mine;
