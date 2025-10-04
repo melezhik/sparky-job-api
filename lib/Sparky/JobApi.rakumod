@@ -4,7 +4,7 @@ use JSON::Fast;
 
 use Sparrow6::DSL;
 
-unit module Sparky::JobApi:ver<0.0.8>;
+unit module Sparky::JobApi:ver<0.0.9>;
 
 class Sparky::JobApi {
 

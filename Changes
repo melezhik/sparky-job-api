@@ -2,6 +2,8 @@ Revision history for Sparky-Job-Api
 
 {{$NEXT}}
 
+0.0.9 2025-10-04T15:40:00Z
+
     New features:
     report() method
     meta() method
