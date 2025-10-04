@@ -70,7 +70,11 @@ class Sparky::JobApi {
 
   method report() {
 
-    my %r = HTTP::Tiny.get: "{self!sparky-api}/repor/raw/{$.project}/{$.job-id}";
+    my %r = HTTP::Tiny.get: "{self!sparky-api}/report/raw/{$.project}/{$.job-id}";
+
+    say ">>> get report: {self!sparky-api}/report/raw/{$.project}/{$.job-id} ...";
+
+    say ">>> get report: status={%r<status>}";
 
     return "" unless %r<status> == 200;
 
