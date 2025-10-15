@@ -172,7 +172,7 @@ class Sparky::JobApi {
     my $return;
     my $cnt = 0;
     while True {
-      my $r = HTTP::Tiny.get: "{self!sparky-api()}/trigger/{$project}/{$job-id}",
+      my $r = HTTP::Tiny.get: "{self!internal-api()}/trigger/{$project}/{$job-id}",
         headers => %headers;
         if $r<status> == 200 {
           $return = $r<content>.decode;
