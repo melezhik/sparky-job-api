@@ -2,6 +2,9 @@ Revision history for Sparky-Job-Api
 
 {{$NEXT}}
 
+    Allow 502 error
+    For retry
+    
 0.0.10 2025-10-04T19:40:00Z
 
     Add boolean

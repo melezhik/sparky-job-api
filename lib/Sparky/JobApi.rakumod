@@ -116,7 +116,7 @@ class Sparky::JobApi {
 
   method queue(%config) {
 
-    die "can'r queue already running project" if $.mine;
+    die "can't queue already running project" if $.mine;
 
     %config<parent-project> = tags()<SPARKY_PROJECT>;
 
@@ -152,12 +152,13 @@ class Sparky::JobApi {
         headers => %headers,
         content => to-json(%upload);
         last if $r<status> == 200;
-        if $cnt == 3 or $r<status> != 599 {
-          die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}" 
+        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 > {
+          $cnt++;
+          say ">>> ({$r<status>} recieved) http retry: #0{$cnt}";
+          sleep(60);
+        } else {  
+          die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}"
         }
-        $cnt++;
-        say ">>> (599 recieved) http retry: #0{$cnt}";
-        sleep(60);
     }
     return;
   }
@@ -178,12 +179,13 @@ class Sparky::JobApi {
           $return = $r<content>.decode;
           last;
         }
-        if $cnt == 3 or $r<status> != 599 {
+        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 > {
+          $cnt++;
+          say ">>> ({$r<status>} recieved) http retry: #0{$cnt}";
+          sleep(60);
+        } else {  
           die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}"
         }
-        $cnt++;
-        say ">>> (599 recieved) http retry: #0{$cnt}";
-        sleep(60);
     }
 
     return $return;
@@ -264,12 +266,13 @@ class Sparky::JobApi {
         if $r<status> == 200 {
           last;
         }
-        if $cnt == 3 or $r<status> != 599 {
+        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 > {
+          $cnt++;
+          say ">>> ({$r<status>} recieved) http retry: #0{$cnt}";
+          sleep(60);
+        } else {  
           die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}"
         }
-        $cnt++;
-        say ">>> (599 recieved) http retry: #0{$cnt}";
-        sleep(60);
     }
     return;
   }
@@ -294,12 +297,13 @@ class Sparky::JobApi {
           $return = from-json($r<content>.decode);
           last;
         }
-        if $cnt == 3 or $r<status> != 599 {
+        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 > {
+          $cnt++;
+          say ">>> ({$r<status>} recieved) http retry: #0{$cnt}";
+          sleep(60);
+        } else {  
           die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}"
         }
-        $cnt++;
-        say ">>> (599 recieved) http retry: #0{$cnt}";
-        sleep(60);
     }
     return $return;
   }
@@ -324,12 +328,13 @@ class Sparky::JobApi {
         headers => %headers,
         content => Blob.new($path.IO.slurp: :bin);
         last if $r<status> == 200;
-        if $cnt == 3 or $r<status> != 599 {
+        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 > {
+          $cnt++;
+          say ">>> ({$r<status>} recieved) http retry: #0{$cnt}";
+          sleep(60);
+        } else {  
           die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}"
         }
-        $cnt++;
-        say ">>> (599 recieved) http retry: #0{$cnt}";
-        sleep(60);
     }
 
     return;
@@ -361,12 +366,13 @@ class Sparky::JobApi {
           }
           last;
         }
-        if $cnt == 3 or $r<status> != 599 {
+        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 > {
+          $cnt++;
+          say ">>> ({$r<status>} recieved) http retry: #0{$cnt}";
+          sleep(60);
+        } else {  
           die "{$r<status>} : { $r<content> ?? $r<content>.decode !! ''}"
         }
-        $cnt++;
-        say ">>> (599 recieved) http retry: #0{$cnt}";
-        sleep(60);
     }
 
     return $return;
