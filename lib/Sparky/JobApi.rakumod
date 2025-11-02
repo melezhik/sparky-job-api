@@ -152,7 +152,7 @@ class Sparky::JobApi {
         headers => %headers,
         content => to-json(%upload);
         last if $r<status> == 200;
-        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 > {
+        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 ) {
           $cnt++;
           say ">>> ({$r<status>} recieved) http retry: #0{$cnt}";
           sleep(60);
@@ -179,7 +179,7 @@ class Sparky::JobApi {
           $return = $r<content>.decode;
           last;
         }
-        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 > {
+        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 ) {
           $cnt++;
           say ">>> ({$r<status>} recieved) http retry: #0{$cnt}";
           sleep(60);
@@ -266,7 +266,7 @@ class Sparky::JobApi {
         if $r<status> == 200 {
           last;
         }
-        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 > {
+        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 ) {
           $cnt++;
           say ">>> ({$r<status>} recieved) http retry: #0{$cnt}";
           sleep(60);
@@ -297,7 +297,7 @@ class Sparky::JobApi {
           $return = from-json($r<content>.decode);
           last;
         }
-        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 > {
+        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 ) {
           $cnt++;
           say ">>> ({$r<status>} recieved) http retry: #0{$cnt}";
           sleep(60);
@@ -328,7 +328,7 @@ class Sparky::JobApi {
         headers => %headers,
         content => Blob.new($path.IO.slurp: :bin);
         last if $r<status> == 200;
-        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 > {
+        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 ) {
           $cnt++;
           say ">>> ({$r<status>} recieved) http retry: #0{$cnt}";
           sleep(60);
@@ -366,7 +366,7 @@ class Sparky::JobApi {
           }
           last;
         }
-        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 > {
+        if $cnt < 3 and ( $r<status> == 599 or $r<status> == 504 ) {
           $cnt++;
           say ">>> ({$r<status>} recieved) http retry: #0{$cnt}";
           sleep(60);
