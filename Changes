@@ -2,6 +2,8 @@ Revision history for Sparky-Job-Api
 
 {{$NEXT}}
 
+0.0.11 2025-11-07T16:00:00Z
+
     Allow 502 error
     For retry
     
